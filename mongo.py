@@ -1,6 +1,7 @@
 import os, datetime, tarfile, os.path
 from pymongo import MongoClient
 from bson.json_util import dumps
+import shutil
 
 def create_folder_backup(dbname):
     dt = datetime.datetime.now()
@@ -28,10 +29,12 @@ def run_backup(mongoUri, dbname):
             file.write(']')
     tar_file = ('%s.tar.gz' % (directory)) 
     make_tarfile(tar_file,files_to_compress)
+    shutil.rmtree(directory)
 
 def make_tarfile(output_filename, source_dir):
     tar = tarfile.open(output_filename, "w:gz")
     for filename in source_dir:
         tar.add(filename)
     tar.close()
+    
     
